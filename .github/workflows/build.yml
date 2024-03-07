@@ -18,8 +18,14 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Upload thing
+    - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: NBTVoid 1.19.4
         path: build/libs/nbtvoid-2.0.0.jar
+    - name: Upload release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: build/libs/nbtvoid-2.0.0.jar
+        tag: 2.0.0
