@@ -61,15 +61,19 @@ public class SearchProvider {
         query = query.toLowerCase(Locale.ROOT);
         if (Config.getInstance().getDoCheckTooltip()) {
             for (Text tooltip : stack.getTooltip(null, TooltipContext.Default.BASIC.withCreative())) {
-                if (tooltip.getString().toLowerCase(Locale.ROOT).contains(query)) return true;
+                if (tooltip.getString().toLowerCase(Locale.ROOT).contains(query))
+                    return true;
             }
         } else {
-            if (!stack.hasNbt()) return false;
+            if (!stack.hasNbt())
+                return false;
             NbtCompound nbt = stack.getNbt();
-            if (!nbt.contains("display", NbtElement.COMPOUND_TYPE)) return false;
+            if (!nbt.contains("display", NbtElement.COMPOUND_TYPE))
+                return false;
             NbtCompound display = nbt.getCompound("display");
             if (display.contains("Name", NbtElement.STRING_TYPE)) {
-                return Text.Serialization.fromJson(display.getString("Name")).getString().toLowerCase(Locale.ROOT).contains(query);
+                return Text.Serializer.fromJson(display.getString("Name")).getString().toLowerCase(Locale.ROOT)
+                        .contains(query);
             }
         }
         return false;
@@ -83,37 +87,43 @@ public class SearchProvider {
         nameCheck: if (Config.getInstance().getNameCheck() == Config.CheckType.ANY) {
             if (!nameQueries.isEmpty()) {
                 for (String query : nameQueries) {
-                    if (matchesName(stack, query)) break nameCheck;
+                    if (matchesName(stack, query))
+                        break nameCheck;
                 }
                 return false;
             }
         } else {
             for (String query : nameQueries) {
-                if (!matchesName(stack, query)) return false;
+                if (!matchesName(stack, query))
+                    return false;
             }
         }
         identifierCheck: if (Config.getInstance().getIdCheck() == Config.CheckType.ANY) {
             if (!identifierQueries.isEmpty()) {
                 for (String query : identifierQueries) {
-                    if (matchesIdentifier(stack, query)) break identifierCheck;
+                    if (matchesIdentifier(stack, query))
+                        break identifierCheck;
                 }
                 return false;
             }
         } else {
             for (String query : identifierQueries) {
-                if (!matchesIdentifier(stack, query)) return false;
+                if (!matchesIdentifier(stack, query))
+                    return false;
             }
         }
         nbtCheck: if (Config.getInstance().getNbtCheck() == Config.CheckType.ANY) {
             if (!nbtQueries.isEmpty()) {
                 for (String query : nbtQueries) {
-                    if (matchesNbt(stack, query)) break nbtCheck;
+                    if (matchesNbt(stack, query))
+                        break nbtCheck;
                 }
                 return false;
             }
         } else {
             for (String query : nbtQueries) {
-                if (!matchesNbt(stack, query)) return false;
+                if (!matchesNbt(stack, query))
+                    return false;
             }
         }
         return true;

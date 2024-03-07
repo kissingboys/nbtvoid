@@ -12,29 +12,27 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NbtVoid implements ClientModInitializer {
-    private static final Path VOID_SAVE_PATH = FabricLoader.getInstance().getGameDir().resolve("void.nbt");
+    private static final File VOID_SAVE_PATH = FabricLoader.getInstance().getGameDir().resolve("void.nbt").toFile();
     public static final String MOD_ID = "nbtvoid";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final VoidCollection VOID = new VoidCollection();
-    public static final ItemGroup VOID_GROUP = Registry.register(Registries.ITEM_GROUP, new Identifier(MOD_ID, "void"), FabricItemGroup.builder()
+    public static final ItemGroup VOID_GROUP = FabricItemGroup.builder(new Identifier(MOD_ID, "void"))
             .displayName(Text.translatable("itemGroup.nbtvoid.void"))
             .icon(Items.ENDER_CHEST::getDefaultStack)
             .texture("item_search.png")
             .type(ItemGroup.Type.SEARCH)
-            .build()
-    );
+            .build();
 
     public static void load() {
         VOID.setMaxSize(Config.getInstance().getMaxStoredItemRows() * 9);
@@ -45,7 +43,8 @@ public class NbtVoid implements ClientModInitializer {
             LOGGER.error("Could not load NBT void: " + e);
             return;
         }
-        if (nbt == null) return;
+        if (nbt == null)
+            return;
         NbtList entries = nbt.getList("entries", NbtElement.COMPOUND_TYPE);
         for (NbtElement entry : entries) {
             NbtCompound stackNbt = (NbtCompound) entry;
