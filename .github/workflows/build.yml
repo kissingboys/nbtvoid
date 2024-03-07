@@ -18,3 +18,8 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Upload thing
+      uses: actions/upload-artifact@v2
+      with:
+        name: NBTVoid 1.19.4
+        path: build/libs/nbtvoid-2.0.0.jar
